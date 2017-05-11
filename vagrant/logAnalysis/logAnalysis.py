@@ -2,9 +2,11 @@
 
 import psycopg2
 
+
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
     return psycopg2.connect("dbname=news")
+
 
 def popularArticles():
     """Returns the top 3 popular articles."""
@@ -23,6 +25,7 @@ def popularArticles():
         print(article[0] + " - " + str(article[1]) + " views")
     DB.close()
 
+
 def popularAuthors():
     """Returns the popular authors of all time"""
     DB = connect()
@@ -40,8 +43,9 @@ def popularAuthors():
         print(author[0] + " - " + str(author[1]) + " views")
     DB.close()
 
+
 def highFailureDays():
-    """Returns the top 5 popular authors of all time"""
+    """Returns the days with more than 1% error rate"""
     DB = connect()
     c = DB.cursor()
 
@@ -56,7 +60,8 @@ def highFailureDays():
                      WHERE to_char(time, 'Month DD, YYYY') = day \
                      AND log.status != '200 OK' \
                      GROUP BY day) \
-               SELECT hitlog.day, (failures::decimal / pagehits::decimal) * 100 as errorrate \
+               SELECT hitlog.day, \
+               (failures::decimal / pagehits::decimal) * 100 as errorrate \
                FROM hitlog, failurelog \
                WHERE hitlog.day = failurelog.day \
                AND (failures::decimal / pagehits::decimal) > 0.01 \
@@ -73,11 +78,13 @@ if __name__ == '__main__':
 
     print("The most popular three articles of all time are as follows: \n")
     popularArticles()
-    
-    print("\n" + "Popularity of authors is as follows (Most popular first) " + "\n")
+
+    print("\n" + "Popularity of authors is as follows (Most popular first) " \
+          + "\n")
     popularAuthors()
 
-    print("\n" + "The days on which more than 1% of requests lead to errors are as follows: " + "\n")
+    print("\n" + "The days on which more than 1% of requests lead to errors \
+          are as follows: " + "\n")
     highFailureDays()
 
     print("\n" + ("*" * 75) + "\n")
