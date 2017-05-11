@@ -79,8 +79,8 @@ if __name__ == '__main__':
     print("The most popular three articles of all time are as follows: \n")
     popularArticles()
 
-    print("\n" + "Popularity of authors is as follows (Most popular first) " \
-          + "\n")
+    print("\n" + "Popularity of authors is as follows (Most popular first) " +
+          "\n")
     popularAuthors()
 
     print("\n" + "The days on which more than 1% of requests lead to errors \
